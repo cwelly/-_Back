@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.passproject.repository.MapDAO">
+
+
+	<select id="searchDong" parameterType="String" resultType="mapInfo">
+		<![CDATA[
+		select * 
+		from (
+			SELECT apartmentName , buildYear , area , dong ,  jibun ,dealAmount , sidoName, gugunName ,  ROW_NUMBER() OVER (PARTITION BY b.apartmentName order by dealAmount desc) AS RANKING  
+    		FROM housedeal d,  (
+				select a.apartmentName , a.buildYear ,  a.dong , a.jibun  , d.sidoName, d.gugunName , a.aptCode from  houseinfo a, dongcode d  where a.dongCode=d.dongCode and d.dongName=#{dong}
+        	)  b  
+    		where b.aptCode = d.aptCode  
+		) a 
+		where a.RANKING<=3;
+		]]>
+	</select>
+	
+	<select id="searchName" parameterType="String" resultType="mapInfo">
+		<![CDATA[
+		select * 
+		from (
+		SELECT apartmentName , buildYear , area , dong ,  jibun ,dealAmount , sidoName, gugunName ,
+        ROW_NUMBER() OVER (PARTITION BY b.apartmentName order by dealAmount desc) AS RANKING  FROM  housedeal d,
+        (   
+			select apartmentName , buildYear ,  dong ,  jibun  , sidoName, gugunName , aptCode  
+            from houseinfo i , dongcode d  
+            where locate(#{name},apartmentName  )>0 and i.dongCode = d.dongCode  
+        ) b  
+        where d.aptCode = b.aptCode 
+		) a 
+    where a.RANKING<=3; 
+		]]>
+	</select>
+	
+</mapper>
