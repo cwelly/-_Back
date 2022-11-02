@@ -5,7 +5,27 @@
 <mapper namespace="com.ssafy.passproject.repository.MapDAO">
 
 
-	<select id="searchDong" parameterType="String" resultType="mapInfo">
+	<resultMap type="mapInfo" id="mapp">
+		<result column="apartmentName" property="apartmentName"/>
+		<result column="buildYear" property="buildYear"/>
+		<result column="area" property="area"/>
+		<result column="dong" property="dong"/>
+		<result column="jibun" property="jibun"/>
+		<result column="dealAmount" property="dealAmount"/>
+		<result column="sidoName" property="sido"/>
+		<result column="gugunName" property="gugun"/>
+	</resultMap>
+<!-- 
+private String apartmentName;
+	private String buildYear;
+	private String area;
+	private String dong;
+	private String jibun;
+	private String dealAmount;
+	private String sido;
+	private String gugun;
+ -->
+	<select id="searchDong" parameterType="String" resultMap="mapp">
 		<![CDATA[
 		select * 
 		from (
@@ -19,7 +39,7 @@
 		]]>
 	</select>
 	
-	<select id="searchName" parameterType="String" resultType="mapInfo">
+	<select id="searchName" parameterType="String" resultMap="mapp">
 		<![CDATA[
 		select * 
 		from (

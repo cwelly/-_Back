@@ -1,5 +1,12 @@
 let url = "https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes";
 let regcode = "*00000000";
+
+
+function getContextPath() {
+    var hostIndex = location.href.indexOf( location.host ) + location.host.length;
+	return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
+}
+var ctx = getContextPath();
 // 전국 특별/광역시, 도
 // https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=*00000000
 //$.ajax({
@@ -74,17 +81,17 @@ let regcode = "*00000000";
 //    });
 //});
 
-// --------------  새로 만드는  함수 처리 ------------------- 
+// --------------  새로 만드는  함수 처리 -------------------
 //document.querySelector("#goSearch").addEventListener("click", function (){
 //	console.log("눌렀을때");
 //	let si = document.querySelector("#sido");
 //	let si_val =si[si.selectedIndex].textContent;
 //	console.log("시도 값 : "+si_val);
-//	// 시도 
+//	// 시도
 //	let gu = document.querySelector("#gugun");
 //	let gu_val =gu[gu.selectedIndex].textContent;
 //	console.log("구군 값 :"+gu_val);
-//	// 구군  
+//	// 구군
 //	let dong = document.querySelector("#dong");
 //	console.log(dong.selectedIndex);
 //	// 동은 기본값이 null akwsk?
@@ -98,13 +105,19 @@ let regcode = "*00000000";
 //		.then(data => data.json())
 //		.then(res => console.log(res));
 //	}
-//	
+//
 //});
 
-///// 전국 특별/광역시, 도 /////
-fetch("/WhereIsMyHome/region.do?action=sido")
+
+// 처음 로딩시 시를 불러오는 코드
+// 컨텍스트 루트 받아오기
+
+
+// fetch("/WhereIsMyHome/region.do?action=sido")
+fetch(ctx+"/region.do/sido")
 .then(response => response.json())
-.then(data => {
+    .then(data => {
+        console.log(data);
 	let sidoSel = document.querySelector("#sido");
 	let init = document.createElement("option");
 	init.textContent = "시도선택";
@@ -121,22 +134,17 @@ fetch("/WhereIsMyHome/region.do?action=sido")
 
 
 
-function sortDong() {
-	let url = `/WhereIsMyHome/map.do?action=sortAmount`;
-	console.log("fuckyou")
-	fetch(`${url}`)
-    .then(response => response.json())
-    .then(data => makeList(data));
-}
 
 document.querySelector("#sido").addEventListener("change", function() {
 	let sidoSel = document.querySelector("#sido");
     let sidoCode = sidoSel.options[sidoSel.selectedIndex].value;
     
-    fetch(`/WhereIsMyHome/region.do?action=gugun&sido=${sidoCode}`)
+    console.log(ctx+`/region.do/gugun/${sidoCode}`);
+    // fetch(`/WhereIsMyHome/region.do?action=gugun&sido=${sidoCode}`)
+    fetch(ctx+`/region.do/gugun/${sidoCode}`)
     	.then(response => response.json())
     	.then(data => {
-    		console.log(data.regions);
+    		console.log(data);
     		let gugunSel = document.querySelector("#gugun");
     		
     		while (gugunSel.firstChild) {
@@ -160,8 +168,8 @@ document.querySelector("#sido").addEventListener("change", function() {
 document.querySelector("#gugun").addEventListener("change", function() {
 	let gugunSel = document.querySelector("#gugun");
     let gugunCode = gugunSel.options[gugunSel.selectedIndex].value;
-    
-    fetch(`/WhereIsMyHome/region.do?action=dong&gugun=${gugunCode}`)
+    //fetch(`/WhereIsMyHome/region.do?action=dong&gugun=${gugunCode}`)
+    fetch(ctx+`/region.do/dong/${gugunCode}`)
     	.then(response => response.json())
     	.then(data => {
     		console.log(data.regions);
@@ -205,13 +213,13 @@ document.querySelector("#goSearchByAddr").addEventListener("click", function () 
     	console.log(sido, gugun, dong);
     	return;
     }
-    
-    let url = `/WhereIsMyHome/map.do?action=searchDong&sido=${sido}&gugun=${gugun}&dong=${dong}`;
+    // let url = `/WhereIsMyHome/map.do?action=searchDong&sido=${sido}&gugun=${gugun}&dong=${dong}`;
+    let url = ctx+`/map.do/searchDong/${sido}/${gugun}/${dong}`;
     console.log(url);
 
     fetch(`${url}`)
         .then(response => response.json())
-        .then(data => makeList(data));
+        .then(data => {  makeList(data) });
 });
 
 // 아파트 이름으로 검색
@@ -220,7 +228,7 @@ document.querySelector("#goSearchByAPTName").addEventListener("click", function(
 
     console.log(aptName);
 
-    let url = `/WhereIsMyHome/map.do?action=searchName&name=${aptName}`;
+    let url = ctx+`/map.do/searchName/${aptName}`;
     console.log(url);
 
     fetch(`${url}`)
@@ -258,7 +266,7 @@ function searchInterestRegion(sido, gugun, dong) {
 	console.log(gugun);
 	console.log(dong);
 	
-	let url = `/WhereIsMyHome/map.do?action=searchDong&sido=${sido}&gugun=${gugun}&dong=${dong}`;
+	let url = ctx+`/map.do/searchDong/${sido}/${gugun}/${dong}`;
     console.log(url);
 
     fetch(`${url}`)
@@ -336,6 +344,7 @@ function makeList(data) {
 //    }
 
     init();
+    // if (apts == null) {
     if (apts.length === 0) {
         alert("검색 내역이 없습니다!")
         hideResult()
@@ -345,7 +354,7 @@ function makeList(data) {
         let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
         let geocoder = new kakao.maps.services.Geocoder();
 
-        console.log(apts.length)
+        console.log(apts)
 
         //주소로 좌표 얻기
 
@@ -372,7 +381,7 @@ function makeList(data) {
 //            let jinum = apt.querySelector("지번").textContent;
 
 //            addressTmp = siText + " " + gunText + dong + " " + jinum
-            let address = apt["시도"] + " " + apt["구군"] + " " + apt["동"] + apt["지번"];
+            let address = apt["sido"] + " " + apt["gugun"] + " " + apt["dong"] + apt["jibun"];
 
 //            addressArr.push(addressTmp);
             addressArr.push(address);
@@ -385,34 +394,34 @@ function makeList(data) {
 //            aptInfo.aptYear = apt.querySelector("건축년도").textContent;//날짜
             aptInfo.address = address;
 //            aptInfo.aptName = str.includes(apt["아파트이름"]) ? apt["아파트이름"] : apt["아파트이름"]+"아파트" ;
-            aptInfo.aptName = apt["아파트이름"];
-            console.log(aptInfo.aptName);
-            aptInfo.aptPirce = apt["거래금액"];
-            aptInfo.aptSize = apt["면적"];
-            aptInfo.aptYear = apt["건축년도"];
+            aptInfo.aptName = apt["apartmentName"];
+            // console.log(aptInfo.aptName);
+            aptInfo.aptPirce = apt["dealAmount"];
+            aptInfo.aptSize = apt["area"];
+            aptInfo.aptYear = apt["buildYear"];
             
             aptArr.push(aptInfo);
             let tr = document.createElement("tr");
 
             let nameTd = document.createElement("td");
-            nameTd.appendChild(document.createTextNode(apt["아파트이름"]));
+            nameTd.appendChild(document.createTextNode(apt["apartmentName"]));
             tr.appendChild(nameTd);
 
             let floorTd = document.createElement("td");
-            floorTd.appendChild(document.createTextNode(apt["건축년도"]));
+            floorTd.appendChild(document.createTextNode(apt["buildYear"]));
             tr.appendChild(floorTd);
 
             let areaTd = document.createElement("td");
-            areaTd.appendChild(document.createTextNode(apt["면적"]));
+            areaTd.appendChild(document.createTextNode(apt["area"]));
             tr.appendChild(areaTd);
 
             let dongTd = document.createElement("td");
-            dongTd.appendChild(document.createTextNode(apt["동"]));
+            dongTd.appendChild(document.createTextNode(apt["dong"]));
             tr.appendChild(dongTd);
 
             let priceTd = document.createElement("td");
             priceTd.appendChild(
-                document.createTextNode(apt["거래금액"] + "만원"),
+                document.createTextNode(apt["dealAmount"] + "만원"),
             );
             priceTd.classList.add("text-end");
             tr.appendChild(priceTd);
@@ -465,21 +474,21 @@ function makeList(data) {
         // });
     }
     document.querySelector("#dealAmount").addEventListener("click", function() {
-    	let url = `/WhereIsMyHome/map.do?action=sortAmount`;
+    	let url = ctx+`/map.do/sortAmount`;
     	fetch(`${url}`)
         .then(response => response.json())
         .then(data => makeList(data));
         	
     });
     document.querySelector("#buildYear").addEventListener("click", function() {
-    	let url = `/WhereIsMyHome/map.do?action=sortYear`;
+    	let url = ctx+`/map.do/sortYear`;
     	fetch(`${url}`)
     	.then(response => response.json())
     	.then(data => makeList(data));
     	
     });
     document.querySelector("#area").addEventListener("click", function() {
-    	let url = `/WhereIsMyHome/map.do?action=sortArea`;
+    	let url = ctx+`/map.do/sortArea`;
     	fetch(`${url}`)
     	.then(response => response.json())
     	.then(data => makeList(data));

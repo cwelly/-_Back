@@ -40,7 +40,7 @@ public class UserController {
 	private RegionService regionService;
 
 	@Autowired
-	public UserController(UserService userService) {
+	public UserController(UserService userService,RegionService regionService) {
 		logger.info("UserCotroller 생성자 호출!!!!");
 		this.userService = userService;
 		this.regionService = regionService;
@@ -65,6 +65,24 @@ public class UserController {
 //		return cnt + "";
 //	}
 //	
+	
+	@PostMapping("/update")
+	public String update(@RequestParam("emailid") String emailid, String emaildomain, String password,
+			String name, String addr, String phone) {
+		User user = new User(null, new Email(emailid, emaildomain) , password, name, addr, phone);
+		 try {
+			userService.modify(user);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "redirect:/";
+	}
+	
 	@PostMapping("/join")
 	public String join(@RequestParam("emailid") String emailid, String emaildomain, String password,
 			String name, String addr, String phone, Model model) {
@@ -100,37 +118,54 @@ public class UserController {
 	@PostMapping("/login") // 실제 로그인
 	//String email = request.getParameter("email) //@RequestParam("email") String email
 	public String login(@RequestParam("emailid") String emailid,@RequestParam("emaildomain") String emaildomain, String password, Model model, HttpSession session,
-			 HttpServletRequest request, HttpServletResponse response) {
+			 HttpServletRequest request, HttpServletResponse response) throws NoSuchAlgorithmException, SQLException {
 
-		try {
+		
 			Email email = new Email(emailid, emaildomain);
 			
 			User user = userService.login(email, password);
 			if (user!=null) {
-//				List<Dong> interestRegion = regionService.getInterestRegionByUserno(user.getUserno());
+				System.out.println(user.getUserno());
 
-//				UserInfo info = UserInfo.of(user, interestRegion);
+				List<Dong> interestRegion = regionService.getInterestRegionByUserno(user.getUserno());
 
-				request.getSession().setAttribute("user", user);
+				UserInfo info = UserInfo.of(user, interestRegion);
+
+				request.getSession().setAttribute("user", info);
 				request.setAttribute("loginResult", "로그인 성공!!!");
 				request.getSession().setAttribute("login", user);
 				
 			} else {
 				request.setAttribute("loginResult", "로그인 실패!!!");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("msg", "로그인 중 문제 발생!!!");
-			return "error/error";
-		}
+		
+//			e.printStackTrace();
+//			model.addAttribute("msg", "로그인 중 문제 발생!!!");
+//			return "error/error";
+		
 		return "redirect:/";
 	}
 	
-//	@GetMapping("/logout")
-//	public String logout(HttpSession session) {
-//		session.invalidate();
-//		return "redirect:/";
-//	}
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
+	}
+	@GetMapping("/withdrawal")
+	public String withdrawal( HttpServletRequest request) {
+		HttpSession session  = request.getSession();
+		UserInfo info = (UserInfo) session.getAttribute("user");
+		Email email = info.getEmail();
+		System.out.println(email);
+		try {
+			userService.withdrawal(email);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "redirect:/user.do/logout";
+	}
 //	
 //	@GetMapping("/list")
 //	public String list() {

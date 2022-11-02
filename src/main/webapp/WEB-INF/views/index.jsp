@@ -526,7 +526,7 @@
 	          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	        </div>
 	        <div class="modal-body">
-	          <form action="user.do" method="post" id="modify-form">
+	          <form action="${root }/user.do/update" method="post" id="modify-form">
 	          	<input type="hidden" name="action" value="modify">
 	          	<div class="input-group">
                 <input
@@ -621,7 +621,7 @@
 
   <script src="assets/js/admin.js"></script>
   <!-- 지도 관련-->
-  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2defda81cbfc88091824a37dddb7162e&libraries=services"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=32b7b36540e75a778fb8400e8a821a41&libraries=services"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="assets/js/map.js"></script>
 

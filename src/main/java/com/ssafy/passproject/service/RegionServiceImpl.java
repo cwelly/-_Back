@@ -1,6 +1,7 @@
 package com.ssafy.passproject.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,10 @@ public class RegionServiceImpl implements RegionService {
 
 	@Override
 	public List<Dong> getInterestRegionByUserno(int userno) throws SQLException {
-		return regionRepository.findInterestRegionByUserno(userno);
+		List<Dong> tmp = regionRepository.findInterestRegionByUserno(userno);
+		
+			return regionRepository.findInterestRegionByUserno(userno);
+		
 	}
 
 	@Override
