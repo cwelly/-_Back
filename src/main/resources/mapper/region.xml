@@ -3,5 +3,22 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.passproject.repository.RegionRepository">
-
+	
+	
+	<select id="findInterestRegionByUserno" parameterType="int" resultType="dong">
+		select d.dongcode, d.sidoName, d.gugunName, d.dongName
+		from interest_region ir
+		join user u on ir.userno = u.userno
+		join dongcode d on ir.dongcode = d.dongcode
+		where ir.userno = #{userno}
+	</select>
+	<select id="findSidoList" resultType="region">
+		select distinct sidoName, substring(dongcode, 1, 2) from dongcode
+	</select>
+	<select id="findGugunList" parameterType="String"  resultType="region">
+		select gugunName, substring(dongCode, 1, 5) from dongcode where dongcode like '${sidoCode}%00000' and gugunName is not null
+	</select>
+	<select id="findDongList" parameterType="String" resultType="region">
+		select dongName, dongCode from dongcode where dongcode like '${gugunCode}%' and dongName is not null
+	</select>
 </mapper>

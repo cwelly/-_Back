@@ -1,5 +1,10 @@
 let loginedUser;
 
+function getContextPath() {
+    var hostIndex = location.href.indexOf( location.host ) + location.host.length;
+	return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
+}
+var ctx = getContextPath();
 const login = () => {
     document.getElementById('login-form').submit();
 }
@@ -79,7 +84,7 @@ document.querySelector("#modal-join-btn").addEventListener("click", join);
 
 document.querySelector("#logout-btn").addEventListener("click", () => {
     if(confirm("로그아웃 하시겠습니까?")) {
-        location.href = "user.do?action=logout";
+        location.href = ctx+"/user.do/logout";
     }
 })
 
@@ -88,7 +93,7 @@ const withdrawal = () => {
 //        localStorage.removeItem(loginedUser.email);
 //        alert("탈퇴 성공!!");
 //        hideToggle();
-    	location.href= "user.do?action=withdrawal";
+    	location.href= ctx+"/user.do/withdrawal";
     }
 }
 
