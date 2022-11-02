@@ -1,9 +1,9 @@
 package com.ssafy.passproject.dto;
 
-import com.ssafy.passproject.domain.Email;
+import com.ssafy.passproject.dto.Email;
 
 public class User {
-
+	
 	private Integer userno;
 	private Email email;
 	private String password;
