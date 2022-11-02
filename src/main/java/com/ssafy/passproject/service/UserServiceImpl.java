@@ -3,11 +3,13 @@ package com.ssafy.passproject.service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.passproject.domain.Email;
+import com.ssafy.passproject.dto.Email;
 import com.ssafy.passproject.dto.User;
 import com.ssafy.passproject.repository.UserRepository;
 
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserService {
 	// 암호화로 인한 코드 변경
 	@Override
 	public int join(User user) throws SQLException, NoSuchAlgorithmException {
+		System.out.println("회가입");
 		if (userRepository.findByEmail(user.getEmail()) != null) {
 			System.out.println("already registered user");
 			return 0;
@@ -50,8 +53,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean login(Email email, String password) throws SQLException, NoSuchAlgorithmException {
-		return userRepository.login(email, encrypt(password));
+	public User login(Email email, String password) throws SQLException, NoSuchAlgorithmException {
+		Map<String, String> map =new HashMap<>();
+		map.put("emailid", email.getId());
+		map.put("emaildomain", email.getDomain());
+		map.put("userpassword", encrypt(password));
+		
+		return userRepository.login(map);
+		
 	}
 
 	@Override
@@ -72,7 +81,16 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void registInterestRegion(int userno, String dongcode) throws SQLException {
-		userRepository.saveInterestRegion(userno, dongcode);
+		Map<String, String> map =new HashMap<>();
+		
+		
+		map.put("userno", userno+"");
+		map.put("dongcode", dongcode);
+		
+		
+		
+		userRepository.saveInterestRegion(map);
 	}
+
 
 }

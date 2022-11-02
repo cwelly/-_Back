@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<c:set var="root" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,21 +14,21 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="${root }/assets/img/favicon.png" rel="icon">
+  <link href="${root }/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="${root }/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="${root }/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="${root }/assets/css/style.css" rel="stylesheet">
 
   <!-- Custom CSS File -->
-  <link href="assets/css/user.css" rel="stylesheet">
+  <link href="${root }/assets/css/user.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Siimple - v4.7.0
@@ -433,7 +433,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="user.do" method="post" id="login-form">
+          <form action="/user.do/login" method="post" id="login-form">
           	<input type="hidden" name="action" value="login">
           	<!-- <input type="email" class="form-control" name="email" id="login-email" placeholder="Email" required>  -->
           	<div class="input-group">
@@ -478,7 +478,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="user.do" method="post" id="join-form">
+          <form action="/user.do/join" method="post" id="join-form">
           	<input type="hidden" name="action" value="join">
           	<div class="input-group">
                 <input

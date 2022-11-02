@@ -1,4 +1,4 @@
-package com.ssafy.passproject.domain;
+package com.ssafy.passproject.dto;
 
 public class Email {
 
