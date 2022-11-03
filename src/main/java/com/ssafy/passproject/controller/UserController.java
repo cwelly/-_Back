@@ -70,22 +70,24 @@ public class UserController {
 //	}
 //	
 	
-//	@GetMapping("/registregion")
-//	public @ResponseBody ResponseEntity<Map<String,Object>>  registregion(@PathVariable String dongcode){
-//		ResponseEntity<Map<String,Object>> res;
-//		Region region;
-//		Map<String, Object> map = new HashMap();
-//		try {
-//			userService.registInterestRegion(userno, dongcode);;
-//			map.put("resMsg", "Success OK");
-//			map.put("regions", listMember);
-//		}catch(Exception e) {
-//			map.put("resMsg", "false ");
-//		}
-//		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
-//		
-//		return res;
-//	}
+	@GetMapping("/registregion/{dongcode}")
+	public @ResponseBody ResponseEntity<Map<String,Object>>  registregion(@PathVariable String dongcode, HttpServletRequest request){
+		ResponseEntity<Map<String,Object>> res;
+		HttpSession session =request.getSession();
+		UserInfo user = (UserInfo) session.getAttribute("user");
+		Map<String, Object> map = new HashMap();
+		try {
+			userService.registInterestRegion(user.getUserno(), dongcode);;
+			map.put("resMsg", "Success OK");
+			map.put("userno",user.getUserno());
+			map.put("dongcode",dongcode);
+		}catch(Exception e) {
+			map.put("resMsg", "false ");
+		}
+		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		
+		return res;
+	}
 	
 	@PostMapping("/update")
 	public String update(@RequestParam("emailid") String emailid, String emaildomain, String password,
