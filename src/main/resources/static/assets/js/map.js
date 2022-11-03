@@ -243,9 +243,11 @@ document.querySelector("#registInterestRegion").addEventListener("click", functi
     
     console.log(dongcode);
 
-    let url = `/WhereIsMyHome/user.do?action=registregion&dongcode=${dongcode}`;
+    // let url = `/WhereIsMyHome/user.do?action=registregion&dongcode=${dongcode}`;
+    let url = ctx+`/user.do/registregion/${dongcode}`;
     fetch(`${url}`)
-    	.then(response => {
+        .then(response => response.json())
+    	.then(data => {
     		let sidoSel = document.querySelector("#sido");
 		    let sido = sidoSel.options[sidoSel.selectedIndex].text;
 		

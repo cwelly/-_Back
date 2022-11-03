@@ -2,6 +2,7 @@ package com.ssafy.passproject.controller;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.passproject.dto.Email;
+import com.ssafy.passproject.dto.Region;
 import com.ssafy.passproject.dto.Dong;
 import com.ssafy.passproject.dto.User;
 import com.ssafy.passproject.dto.UserInfo;
@@ -65,6 +69,23 @@ public class UserController {
 //		return cnt + "";
 //	}
 //	
+	
+//	@GetMapping("/registregion")
+//	public @ResponseBody ResponseEntity<Map<String,Object>>  registregion(@PathVariable String dongcode){
+//		ResponseEntity<Map<String,Object>> res;
+//		Region region;
+//		Map<String, Object> map = new HashMap();
+//		try {
+//			userService.registInterestRegion(userno, dongcode);;
+//			map.put("resMsg", "Success OK");
+//			map.put("regions", listMember);
+//		}catch(Exception e) {
+//			map.put("resMsg", "false ");
+//		}
+//		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+//		
+//		return res;
+//	}
 	
 	@PostMapping("/update")
 	public String update(@RequestParam("emailid") String emailid, String emaildomain, String password,
