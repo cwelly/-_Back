@@ -18,7 +18,7 @@ const login = () => {
                 }
                 else if (data.resMsg =="로그인 실패") {
                     alert("로그인 실패");
-                    location.href = ctx;
+                    location.href = ctx+'';
                 }
             });
     // document.getElementById('login-form').submit();
