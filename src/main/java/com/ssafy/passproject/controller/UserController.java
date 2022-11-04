@@ -83,13 +83,21 @@ public class UserController {
 	@PostMapping("/update/{emailid}/{emaildomain}/{password}/{name}/{addr}/{phone}")
 	public @ResponseBody ResponseEntity<Map<String,Object>>  update(@PathVariable String emailid,
 			@PathVariable String emaildomain,@PathVariable String password,
-			@PathVariable String name,@PathVariable String addr,@PathVariable String phone) {
+			@PathVariable String name,@PathVariable String addr,@PathVariable String phone, HttpServletRequest request) {
 		User user = new User(null, new Email(emailid, emaildomain) , password, name, addr, phone);
 		ResponseEntity<Map<String,Object>> res;
 		Map<String, Object> map = new HashMap();
 		try {
 			userService.modify(user);
+			user =userService.getByEmail(user.getEmail());
 			map.put("resMsg", "개인정보수정완료");
+			System.out.println(user.getUserno());
+			List<Dong> interestRegion = regionService.getInterestRegionByUserno(user.getUserno());
+			UserInfo info = UserInfo.of(user, interestRegion);
+			request.getSession().removeAttribute("login");
+			request.getSession().setAttribute("login", user);
+			request.getSession().removeAttribute("user");
+			request.getSession().setAttribute("user", info);
 			
 		}catch(Exception e) {
 			map.put("resMsg", "false ");
