@@ -54,21 +54,7 @@ public class UserController {
 	 * login 로그인 () 5. join 회원가입 () 6. buildUser 회원리스트 보기 ()
 	 */
 
-//	// 회원 조회
-//	@GetMapping("/join")
-//	public String join() {
-//		return "user/join";
-//	}
-//	
-//	// 특정 회원 조회 -> 아이디 검색 (기능 없음)
-//	@GetMapping("/{userid}")
-//	@ResponseBody
-//	public String idCheck(@PathVariable("email") Email email) throws Exception {
-//		logger.debug("idCheck userid : {}", userId);
-//		int cnt = userService.login(email, password);
-//		return cnt + "";
-//	}
-//	
+
 	
 	@GetMapping("/registregion/{dongcode}")
 	public @ResponseBody ResponseEntity<Map<String,Object>>  registregion(@PathVariable String dongcode, HttpServletRequest request){
@@ -94,110 +80,135 @@ public class UserController {
 		return res;
 	}
 	
-	@PostMapping("/update")
-	public String update(@RequestParam("emailid") String emailid, String emaildomain, String password,
-			String name, String addr, String phone) {
+	@PostMapping("/update/{emailid}/{emaildomain}/{password}/{name}/{addr}/{phone}")
+	public @ResponseBody ResponseEntity<Map<String,Object>>  update(@PathVariable String emailid,
+			@PathVariable String emaildomain,@PathVariable String password,
+			@PathVariable String name,@PathVariable String addr,@PathVariable String phone) {
 		User user = new User(null, new Email(emailid, emaildomain) , password, name, addr, phone);
-		 try {
-			userService.modify(user);
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return "redirect:/";
-	}
-	
-	@PostMapping("/join")
-	public String join(@RequestParam("emailid") String emailid, String emaildomain, String password,
-			String name, String addr, String phone, Model model) {
-		
-		User user = new User(null, new Email(emailid, emaildomain) , password, name, addr, phone);
+		ResponseEntity<Map<String,Object>> res;
+		Map<String, Object> map = new HashMap();
 		try {
-			int result = userService.join(user);
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			userService.modify(user);
+			map.put("resMsg", "개인정보수정완료");
+			
+		}catch(Exception e) {
+			map.put("resMsg", "false ");
 		}
-		return "redirect:/";
+		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
 		
-		
+		return res;
+	}
+//	public String update(@RequestParam("emailid") String emailid, String emaildomain, String password,
+//			String name, String addr, String phone) {
+//		User user = new User(null, new Email(emailid, emaildomain) , password, name, addr, phone);
 //		try {
-//			userService.joinMember(userInfo);
-//			return "redirect:/user/login";
-//		} catch (Exception e) {
+//			userService.modify(user);
+//		} catch (NoSuchAlgorithmException e) {
+//			// TODO Auto-generated catch block
 //			e.printStackTrace();
-//			model.addAttribute("msg", "회원 가입 중 문제 발생!!!");
-//			return "error/error";
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
 //		}
+//		
+//		return "redirect:/";
+//	}
+	
+	@PostMapping("/join/{emailid}/{emaildomain}/{password}/{name}/{addr}/{phone}")
+	public @ResponseBody ResponseEntity<Map<String,Object>>  join(@PathVariable String emailid,
+			@PathVariable String emaildomain,@PathVariable String password,
+			@PathVariable String name,@PathVariable String addr,@PathVariable String phone) {
+		
+		User user = new User(null, new Email(emailid, emaildomain) , password, name, addr, phone);
+		ResponseEntity<Map<String,Object>> res;
+		Map<String, Object> map = new HashMap();
+		try {
+			if(0!=userService.join(user)) {
+				map.put("resMsg", "회원등록완료");			
+			}
+			else {
+				
+				map.put("resMsg", "중복회원");			
+			}
+			
+		}catch(Exception e) {
+			map.put("resMsg", "false ");
+		}
+		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		
+		return res;
+		
+
 	}
 
-//	@GetMapping("/login") // 로그인 페이지 이동
-//	public String login() {
-//		return "user/login";
-//	}
 
-	@PostMapping("/login") // 실제 로그인
-	//String email = request.getParameter("email) //@RequestParam("email") String email
-	public String login(@RequestParam("emailid") String emailid,@RequestParam("emaildomain") String emaildomain, String password, Model model, HttpSession session,
+	@PostMapping("/login/{emailid}/{emaildomain}/{password}") // 실제 로그인
+	public @ResponseBody ResponseEntity<Map<String,Object>> login(@PathVariable String emailid,@PathVariable String emaildomain,@PathVariable String password, Model model, HttpSession session,
 			 HttpServletRequest request, HttpServletResponse response) throws NoSuchAlgorithmException, SQLException {
-
+		
 		
 			Email email = new Email(emailid, emaildomain);
 			
-			User user = userService.login(email, password);
-			if (user!=null) {
-				System.out.println(user.getUserno());
-
-				List<Dong> interestRegion = regionService.getInterestRegionByUserno(user.getUserno());
-
-				UserInfo info = UserInfo.of(user, interestRegion);
-
-				request.getSession().setAttribute("user", info);
-				request.setAttribute("loginResult", "로그인 성공!!!");
-				request.getSession().setAttribute("login", user);
+			ResponseEntity<Map<String,Object>> res;
+			Map<String, Object> map = new HashMap();
+			try {
+				User user = userService.login(email, password);
+				if(user!=null) {
+					List<Dong> interestRegion = regionService.getInterestRegionByUserno(user.getUserno());
+					UserInfo info = UserInfo.of(user, interestRegion);
+					request.getSession().setAttribute("user", info);
+					request.setAttribute("loginResult", "로그인 성공!!!");
+					request.getSession().setAttribute("login", user);
+					map.put("userInfo", info);	
+					map.put("resMsg", "로그인 성공!!!");			
+				}
+				else {
+					
+					map.put("resMsg", "로그인 실패");			
+				}
 				
-			} else {
-				request.setAttribute("loginResult", "로그인 실패!!!");
+			}catch(Exception e) {
+				map.put("resMsg", "false ");
 			}
-		
-//			e.printStackTrace();
-//			model.addAttribute("msg", "로그인 중 문제 발생!!!");
-//			return "error/error";
-		
-		return "redirect:/";
+			res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+			
+			return res;
 	}
 	
 	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/";
+	public @ResponseBody ResponseEntity<Map<String,Object>> logout(HttpServletRequest request, HttpSession session) {
+		ResponseEntity<Map<String,Object>> res;
+		Map<String, Object> map = new HashMap();
+		try {
+			session.invalidate();
+			map.put("resMsg", "로그아웃완료");
+			
+		}catch(Exception e) {
+			map.put("resMsg", "false ");
+		}
+		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		
+		return res;
 	}
 	@GetMapping("/withdrawal")
-	public String withdrawal( HttpServletRequest request) {
-		HttpSession session  = request.getSession();
-		UserInfo info = (UserInfo) session.getAttribute("user");
-		Email email = info.getEmail();
-		System.out.println(email);
+	public @ResponseBody ResponseEntity<Map<String,Object>> withdrawal ( HttpServletRequest request) {
+		ResponseEntity<Map<String,Object>> res;
+		HttpSession session =request.getSession();
+		Map<String, Object> map = new HashMap();
+		UserInfo user = (UserInfo) session.getAttribute("user");
+		Email email = user.getEmail();
 		try {
 			userService.withdrawal(email);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			session.invalidate();
+			map.put("resMsg", "삭제완료");
+			
+		}catch(Exception e) {
+			map.put("resMsg", "false ");
 		}
+		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
 		
-		return "redirect:/user.do/logout";
+		return res;
 	}
-//	
-//	@GetMapping("/list")
-//	public String list() {
-//		return "redirect:/assets/list.html";
-//	}
-//	
+
+
 }

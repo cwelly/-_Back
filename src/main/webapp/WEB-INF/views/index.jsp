@@ -463,7 +463,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="modal-login-btn" onclick="document.getElementById('login-form').submit();">Login</button>
+          <button type="button" class="btn btn-primary" id="modal-login-btn" >Login</button>
         </div>
       </div>
     </div>
