@@ -13,5 +13,5 @@ public interface UserService {
 	User getByEmail(Email email) throws SQLException;
 	void withdrawal(Email email) throws SQLException;
 	void modify(User user) throws SQLException, NoSuchAlgorithmException;
-	void registInterestRegion(int userno, String dongcode) throws SQLException;
+	boolean registInterestRegion(int userno, String dongcode) throws SQLException;
 }

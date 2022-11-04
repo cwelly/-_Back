@@ -74,13 +74,18 @@ public class UserController {
 	public @ResponseBody ResponseEntity<Map<String,Object>>  registregion(@PathVariable String dongcode, HttpServletRequest request){
 		ResponseEntity<Map<String,Object>> res;
 		HttpSession session =request.getSession();
-		UserInfo user = (UserInfo) session.getAttribute("user");
 		Map<String, Object> map = new HashMap();
+		UserInfo user = (UserInfo) session.getAttribute("user");
 		try {
-			userService.registInterestRegion(user.getUserno(), dongcode);;
-			map.put("resMsg", "Success OK");
-			map.put("userno",user.getUserno());
-			map.put("dongcode",dongcode);
+			
+			if(userService.registInterestRegion(user.getUserno(), dongcode)) {
+				map.put("resMsg", "Success OK");
+				map.put("userno",user.getUserno());
+				map.put("dongcode",dongcode);				
+			}
+			else {
+				map.put("resMsg", "이미 있는 dong 입니다 ");
+			}
 		}catch(Exception e) {
 			map.put("resMsg", "false ");
 		}
