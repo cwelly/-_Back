@@ -248,18 +248,23 @@ document.querySelector("#registInterestRegion").addEventListener("click", functi
     fetch(`${url}`)
         .then(response => response.json())
     	.then(data => {
-    		let sidoSel = document.querySelector("#sido");
-		    let sido = sidoSel.options[sidoSel.selectedIndex].text;
-		
-		    let gugunSel = document.querySelector("#gugun");
-		    let gugun = gugunSel.options[gugunSel.selectedIndex].text;
-		
-		    let dongSel = document.querySelector("#dong");
-		    let dong = dongSel.options[dongSel.selectedIndex].text;
+            if (data.resMsg == "Success OK") {
+                let sidoSel = document.querySelector("#sido");
+                let sido = sidoSel.options[sidoSel.selectedIndex].text;
+            
+                let gugunSel = document.querySelector("#gugun");
+                let gugun = gugunSel.options[gugunSel.selectedIndex].text;
+            
+                let dongSel = document.querySelector("#dong");
+                let dong = dongSel.options[dongSel.selectedIndex].text;
+                
+                let html = `<button class="col-md-3 regionBtn" onclick="searchInterestRegion('${sido}', '${gugun}', '${dong}');">${dong}</button>`;
+                document.querySelector("#interestRegionDiv").insertAdjacentHTML("beforeend", html);
+            }
+            else if(data.resMsg == "이미 있는 dong 입니다 ") {
+                alert("이미 있는 지역입니다")
+            }
 		    
-		    let html = `<button class="col-md-3 regionBtn" onclick="searchInterestRegion('${sido }', '${gugun }', '${dong }');">${dong }</button>`;
-		    
-		    document.querySelector("#interestRegionDiv").insertAdjacentHTML("beforeend", html);
     	});
 })
 

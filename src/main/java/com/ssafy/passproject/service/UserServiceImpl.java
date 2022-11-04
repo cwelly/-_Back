@@ -4,13 +4,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.passproject.dto.Dong;
 import com.ssafy.passproject.dto.Email;
 import com.ssafy.passproject.dto.User;
+import com.ssafy.passproject.repository.RegionRepository;
 import com.ssafy.passproject.repository.UserRepository;
 
 @Service
@@ -31,12 +34,15 @@ public class UserServiceImpl implements UserService {
 	        return builder.toString();
 	}
 
+	private RegionRepository regionRepository;
+	
 	
 	private UserRepository userRepository;
 	
 	@Autowired
-	private UserServiceImpl(UserRepository userRepository  ) {
+	private UserServiceImpl(UserRepository userRepository ,RegionRepository regionRepository ) {
 		this.userRepository = userRepository;
+		this.regionRepository = regionRepository;
 	}
 
 	
@@ -80,16 +86,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void registInterestRegion(int userno, String dongcode) throws SQLException {
+	public boolean registInterestRegion(int userno, String dongcode) throws SQLException {
 		Map<String, String> map =new HashMap<>();
 		
 		
 		map.put("userno", userno+"");
 		map.put("dongcode", dongcode);
-		
-		
+		List<Dong> Inter = regionRepository.findInterestRegionByUserno(userno); 
+		for (Dong dong : Inter) {
+			if(dong.getDongCode().equals(dongcode)) {
+				return false;
+			}
+		}
 		
 		userRepository.saveInterestRegion(map);
+		return true;
 	}
 
 
