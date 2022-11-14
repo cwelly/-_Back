@@ -271,7 +271,7 @@
         </div>
 
         <ul class="faq-list">
-
+		
           <!-- <li>
             <a data-bs-toggle="collapse" class="collapsed" data-bs-target="#faq1">Non consectetur a erat nam at lectus urna duis? <i class="bx bx-down-arrow-alt icon-show"></i><i class="bx bx-x icon-close"></i></a>
             <div id="faq1" class="collapse" data-bs-parent=".faq-list">

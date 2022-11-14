@@ -34,7 +34,28 @@ public class MapController {
 	}
 	//동으로 검색
 	///map.do/searchDong/${sido}/${gugun}/${dong}
-	
+	@GetMapping("/searchDong/{dong}")
+	public @ResponseBody ResponseEntity<Map<String,Object>>  searchdong(
+			@PathVariable String dong ,HttpServletRequest request){
+		ResponseEntity<Map<String,Object>> res;
+		Region region;
+		HttpSession session = request.getSession();
+		Map<String, Object> map = new HashMap();
+		try {
+			if(session.getAttribute("list")!=null) {
+				session.removeAttribute("list");
+			}
+			List<MapInfo> listMember = mapService.searchDong(dong);
+			session.setAttribute("list", listMember);
+			map.put("resMsg", "Success OK");
+			map.put("aptList", listMember);
+		}catch(Exception e) {
+			map.put("resMsg", "false ");
+		}
+		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		
+		return res;
+	}
 	@GetMapping("/searchDong/{sido}/{gugun}/{dong}")
 	public @ResponseBody ResponseEntity<Map<String,Object>>  searchDong(
 			@PathVariable String sido,@PathVariable String gugun,@PathVariable String dong ,HttpServletRequest request){
@@ -46,7 +67,7 @@ public class MapController {
 			if(session.getAttribute("list")!=null) {
 				session.removeAttribute("list");
 			}
-			List<MapInfo> listMember = mapService.searchDong(sido, dong, gugun);
+			List<MapInfo> listMember = mapService.searchDong(dong);
 			session.setAttribute("list", listMember);
 			map.put("resMsg", "Success OK");
 			map.put("aptList", listMember);
