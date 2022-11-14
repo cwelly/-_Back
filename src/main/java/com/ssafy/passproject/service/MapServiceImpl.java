@@ -22,7 +22,7 @@ public class MapServiceImpl implements MapService {
 	}
 	
 	@Override
-	public List<MapInfo> searchDong(String sido, String dong, String gugun) throws SQLException {
+	public List<MapInfo> searchDong( String dong) throws SQLException {
 
 		return mapDAO.searchDong( dong);
 	}

@@ -6,7 +6,7 @@ import java.util.List;
 import com.ssafy.passproject.dto.MapInfo;
 
 public interface MapService {
-	List<MapInfo> searchDong(String sido ,String dong, String gugun) throws SQLException;
+	List<MapInfo> searchDong(String dong) throws SQLException;
 	List<MapInfo> searchName(String name) throws SQLException;
 	List<MapInfo> sortAmount(List<MapInfo> list);
 	List<MapInfo> sortArea(List<MapInfo> list);
