@@ -468,7 +468,7 @@
       </div>
     </div>
   </div>
-
+  <!-- ======= Login Modal End ======= -->
   <!-- ======= Join Modal ======= -->
   <div class="modal fade" id="joinModal" tabindex="-1" aria-labelledby="joinModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -615,9 +615,11 @@
   <script src="assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
+  <!--
+  -->
   <script src="assets/js/main.js"></script>
 
-  <script src="assets/js/user.js"></script>
+   <script src="assets/js/user.js"></script> 
 
   <script src="assets/js/admin.js"></script>
   <!-- 지도 관련-->

@@ -51,7 +51,7 @@
   /**
    * Mobile nav dropdowns activate
    */
-  on('click', '.nav-menu .drop-down > a', function(e) {
+  on('click', '.nav-menu .drop-down > a', function() {
     e.preventDefault()
     this.nextElementSibling.classList.toggle('drop-down-active')
     this.parentElement.classList.toggle('active')
@@ -60,7 +60,7 @@
   /**
    * Scrool links with a class name .scrollto
    */
-  on('click', '.scrollto', function(e) {
+  on('click', '.scrollto', function() {
     if (select(this.hash)) {
       select('.nav-menu .active').classList.remove('active')
       this.parentElement.classList.toggle('active')

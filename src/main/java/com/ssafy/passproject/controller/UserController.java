@@ -149,12 +149,11 @@ public class UserController {
 
 	}
 
-
-	@PostMapping("/login/{emailid}/{emaildomain}/{password}") // 실제 로그인
+	
+	@GetMapping("/login/{emailid}/{emaildomain}/{password}") // 실제 로그인
 	public @ResponseBody ResponseEntity<Map<String,Object>> login(@PathVariable String emailid,@PathVariable String emaildomain,@PathVariable String password, Model model, HttpSession session,
 			 HttpServletRequest request, HttpServletResponse response) throws NoSuchAlgorithmException, SQLException {
-		
-		
+
 			Email email = new Email(emailid, emaildomain);
 			
 			ResponseEntity<Map<String,Object>> res;
