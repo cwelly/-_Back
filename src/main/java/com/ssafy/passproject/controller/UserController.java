@@ -58,17 +58,20 @@ public class UserController {
 
 	
 	@GetMapping("/registregion/{dongcode}")
-	public @ResponseBody ResponseEntity<Map<String,Object>>  registregion(@PathVariable String dongcode, HttpServletRequest request){
+	public @ResponseBody ResponseEntity<Map<String,Object>>  registregion(@PathVariable String dongcode,@RequestParam("emailid") String emailid,@RequestParam("emaildomain") String emaildomain,HttpServletRequest request){
 		ResponseEntity<Map<String,Object>> res;
-		HttpSession session =request.getSession();
+		Email email = new Email(emailid, emaildomain);
 		Map<String, Object> map = new HashMap();
-		UserInfo user = (UserInfo) session.getAttribute("user");
+//		UserInfo user =(UserInfo)user1;
 		try {
-			
-			if(userService.registInterestRegion(user.getUserno(), dongcode)) {
+			User findeduser =userService.getByEmail(email);
+			if(userService.registInterestRegion(findeduser.getUserno(), dongcode)) {
+				List<Dong> interestRegion = regionService.getInterestRegionByUserno(findeduser.getUserno());
+				UserInfo info = UserInfo.of(findeduser, interestRegion);
 				map.put("resMsg", "Success OK");
-				map.put("userno",user.getUserno());
-				map.put("dongcode",dongcode);				
+				map.put("userno",findeduser.getUserno());
+				map.put("dongcode",dongcode);	
+				map.put("userInfo", info);
 			}
 			else {
 				map.put("resMsg", "이미 있는 dong 입니다 ");
@@ -95,10 +98,7 @@ public class UserController {
 			System.out.println(user.getUserno());
 			List<Dong> interestRegion = regionService.getInterestRegionByUserno(user.getUserno());
 			UserInfo info = UserInfo.of(user, interestRegion);
-			request.getSession().removeAttribute("login");
-			request.getSession().setAttribute("login", user);
-			request.getSession().removeAttribute("user");
-			request.getSession().setAttribute("user", info);
+			map.put("userInfo", info);	
 			
 		}catch(Exception e) {
 			map.put("resMsg", "false ");
@@ -199,18 +199,17 @@ public class UserController {
 		return res;
 	}
 	@GetMapping("/withdrawal")
-	public @ResponseBody ResponseEntity<Map<String,Object>> withdrawal ( HttpServletRequest request) {
+	public @ResponseBody ResponseEntity<Map<String,Object>> withdrawal ( @RequestParam("emailid") String emailid,@RequestParam("emaildomain") String emaildomain,HttpServletRequest request) {
 		ResponseEntity<Map<String,Object>> res;
-		HttpSession session =request.getSession();
 		Map<String, Object> map = new HashMap();
-		UserInfo user = (UserInfo) session.getAttribute("user");
-		Email email = user.getEmail();
+		Email email = new Email(emailid, emaildomain);
 		try {
+			System.out.println(emailid+" , "+emaildomain);
 			userService.withdrawal(email);
-			session.invalidate();
 			map.put("resMsg", "삭제완료");
 			
 		}catch(Exception e) {
+			System.out.println("실패");
 			map.put("resMsg", "false ");
 		}
 		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

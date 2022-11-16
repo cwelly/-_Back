@@ -76,7 +76,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void withdrawal(Email email) throws SQLException {
+		User user = userRepository.findByEmail(email);
+		regionRepository.delete(user.getUserno());
 		userRepository.delete(email);
+		
 	}
 	// 암호화로 인한 코드 변경
 	@Override

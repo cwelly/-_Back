@@ -4,7 +4,11 @@
 
 <mapper namespace="com.ssafy.passproject.repository.RegionRepository">
 	
-	
+	<delete id="delete" parameterType="int" >
+		delete 
+		from interest_region 
+		where userno=${userno}
+	</delete>
 	<select id="findInterestRegionByUserno" parameterType="int" resultType="dong">
 		select d.dongcode, d.sidoName, d.gugunName, d.dongName
 		from interest_region ir

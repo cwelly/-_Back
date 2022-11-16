@@ -7,7 +7,7 @@ import com.ssafy.passproject.dto.Dong;
 import com.ssafy.passproject.dto.Region;
 
 public interface RegionService {
-	
+	void delete(int userno) throws SQLException;
 	List<Dong> getInterestRegionByUserno(int userno) throws SQLException;
 	List<Region> getSidoList() throws SQLException;
 	List<Region> getGugunList(String sidoCode) throws SQLException;
