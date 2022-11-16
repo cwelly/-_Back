@@ -565,7 +565,7 @@
 	    </div>
 	  </div>
   </c:if>
-
+ <!-- ======= Info Modal ======= -->
   <!-- ======= Notice Modal ======= -->
   <div class="modal fade" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
