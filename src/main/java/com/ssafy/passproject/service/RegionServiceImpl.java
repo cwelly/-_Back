@@ -47,4 +47,12 @@ public class RegionServiceImpl implements RegionService {
 		return regionRepository.findDongList(gugunName);
 	}
 
+
+
+	@Override
+	public void delete(int userno) throws SQLException {
+		// TODO Auto-generated method stub
+		regionRepository.delete(userno);
+	}
+
 }
