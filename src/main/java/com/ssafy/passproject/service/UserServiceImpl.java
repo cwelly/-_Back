@@ -73,7 +73,9 @@ public class UserServiceImpl implements UserService {
 	public User getByEmail(Email email) throws SQLException {
 		return userRepository.findByEmail(email);
 	}
-
+	
+	
+	
 	@Override
 	public void withdrawal(Email email) throws SQLException {
 		User user = userRepository.findByEmail(email);
@@ -104,6 +106,35 @@ public class UserServiceImpl implements UserService {
 		
 		userRepository.saveInterestRegion(map);
 		return true;
+	}
+
+	@Override
+	public void saveRefreshToken(String userno, String refreshToken) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("userno", userno);
+		map.put("token", refreshToken);
+		userRepository.saveRefreshToken(map);
+	}
+
+	@Override
+	public Object getRefreshToken(String emailid) throws Exception {
+		// TODO Auto-generated method stub
+		return userRepository.getRefreshToken(emailid);
+	}
+
+	@Override
+	public void deleRefreshToken(String emailid) throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("emailid", emailid);
+		map.put("token", null);
+		userRepository.deleteRefreshToken(map);
+	}
+
+	@Override
+	public User findByUserno(String userno) throws SQLException {
+		// TODO Auto-generated method stub
+		return userRepository.findByUserno(userno);
 	}
 
 
