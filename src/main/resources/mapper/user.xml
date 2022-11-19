@@ -9,13 +9,20 @@
 	</insert>
 	
 	<select id="findByEmail" parameterType="email" resultType="user">
-		select * 
+		select userno,email_id,email_domain , password,name,addr,phone 
 		from user 
 		where email_id=#{id} and email_domain=#{domain}
 	</select>
 	
+	<select id="findByUserno" parameterType="String" resultType="user">
+		select userno,email_id,email_domain , password,name,addr,phone
+		from user 
+		where userno=#{userno} 
+	</select>
+	
+	<!-- 생성자 만들어야 함!  -->
 	<select id="login" parameterType="map" resultType="user" >
-		select * 
+		select email_id, email_domain , password , name ,userno
 		from user 
 		where email_id=#{emailid} and email_domain=#{emaildomain} and password=#{userpassword}
 	</select>
@@ -43,4 +50,22 @@
 		into interest_region values (#{userno}, #{dongcode})
 	</insert>
 	
+	
+	<select id="getRefreshToken" parameterType="string" resultType="string">
+		select token
+		from user
+		where email_id = #{userid}
+	</select>
+	
+	<update id="saveRefreshToken" parameterType="map">
+		update user
+		set token = #{token}
+		where userno = #{userno}
+	</update>
+	
+	<update id="deleteRefreshToken" parameterType="map">
+		update user
+		set token = #{token, jdbcType=VARCHAR}
+		where email_id = #{userid}
+	</update>
 </mapper>

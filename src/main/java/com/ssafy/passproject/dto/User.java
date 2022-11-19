@@ -20,6 +20,13 @@ public class User {
 		this.addr = addr;
 		this.phone = phone;
 	}
+	public User(String email_id , String email_domain , String password , String name,String userno) {
+		super();
+		this.userno = Integer.parseInt(userno);
+		this.email=new Email(email_id,email_domain);
+		this.password=password;
+		this.name=name;
+	}
 
 	public User(Integer userno, String emailId, String emailDomain, String password, String name, String addr, String phone) {
 		this(userno, new Email(emailId, emailDomain), password, name, addr, phone);
