@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.passproject.repository.CaseRepository">
+	
+	<!-- 모든 결과 리턴 -->
+	<select id="getCaseAll"  resultType="case">
+		SELECT  caseno, sidogugun, adress,  date_format(casedate, '%y-%m-%d') casedate, casehour , level , 
+		persex, perage , pertrans , perdamage , 
+		vicsex , vicage , victrans , vicdamage ,
+		casetype , caseissue , deadcnt , hurtcnt , lat, lng
+		FROM (select * from webdaejeon6.case order by casedate) a
+		group by adress
+	</select>
+	
+	
+	<!-- 교통 수단에 따른 결과 반환 -->
+	<select id="getCaseByTrans" parameterType="String" resultType="case">
+		SELECT  caseno, sidogugun, adress,  date_format(casedate, '%y-%m-%d') casedate, casehour , level , 
+		persex, perage , pertrans , perdamage , 
+		vicsex , vicage , victrans , vicdamage ,
+		casetype , caseissue , deadcnt , hurtcnt , lat, lng
+		FROM (select * from webdaejeon6.case order by casedate) a
+		where victrans=#{trans}
+		group by adress
+	</select>
+	
+	<!-- 성별에 따른 결과 반환 -->
+	<select id="getCaseBySex" parameterType="String" resultType="case">
+		SELECT  caseno, sidogugun, adress,  date_format(casedate, '%y-%m-%d') casedate, casehour , level , 
+		persex, perage , pertrans , perdamage , 
+		vicsex , vicage , victrans , vicdamage ,
+		casetype , caseissue , deadcnt , hurtcnt , lat, lng
+		FROM (select * from webdaejeon6.case order by casedate) a
+		where vicsex=#{sex}
+		group by adress
+	</select>
+	<!-- 나잇대에 따른 결과 반환 -->
+	<select id="getCaseByAge" parameterType="map" resultType="case">
+		SELECT  caseno, sidogugun, adress,  date_format(casedate, '%y-%m-%d') casedate, casehour , level , 
+		persex, perage , pertrans , perdamage , 
+		vicsex , vicage , victrans , vicdamage ,
+		casetype , caseissue , deadcnt , hurtcnt , lat, lng
+		FROM (select * from webdaejeon6.case order by casedate) a
+		where vicage between #{sm} and #{lg}
+		group by adress
+	</select>
+	<!-- 사용자 정보 맞춤 결과 반환 -->
+	
+	<select id="getCaseFit" parameterType="map" resultType="case">
+		SELECT  caseno, sidogugun, adress,  date_format(casedate, '%y-%m-%d') casedate, casehour , level , 
+		persex, perage , pertrans , perdamage , 
+		vicsex , vicage , victrans , vicdamage ,
+		casetype , caseissue , deadcnt , hurtcnt , lat, lng
+		FROM (select * from webdaejeon6.case order by casedate) a
+		<trim prefix="where" suffixOverrides="and">
+			<if test="sex != null">vicsex = #{sex} and</if>
+			<if test="sm != null">vicage between #{sm} and  #{lg} and</if>
+			<if test="trans != null">trans = #{trans} and</if>
+		</trim>
+		group by adress
+	</select>
+	
+	
+	<!-- 출발점 도착점 지정하면 범위내의 정보 리턴 -->
+	<select id="getCaseWayout" parameterType="map" resultType="case">
+		SELECT  caseno, sidogugun, adress,  date_format(casedate, '%y-%m-%d') casedate, casehour , level , 
+		persex, perage , pertrans , perdamage , 
+		vicsex , vicage , victrans , vicdamage ,
+		casetype , caseissue , deadcnt , hurtcnt , lat, lng
+		FROM (select * from webdaejeon6.case order by casedate) a
+		
+		group by adress
+	</select>
+</mapper>
