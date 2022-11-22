@@ -6,12 +6,15 @@
 	
 	<!-- 모든 결과 리턴 -->
 	<select id="getCaseAll"  resultType="case">
+		<!-- 
 		SELECT  caseno, sidogugun, adress,  date_format(casedate, '%y-%m-%d') casedate, casehour , level , 
 		persex, perage , pertrans , perdamage , 
 		vicsex , vicage , victrans , vicdamage ,
 		casetype , caseissue , deadcnt , hurtcnt , lat, lng
 		FROM (select * from webdaejeon6.case order by casedate) a
 		group by adress
+		 -->
+		 select * from webdaejeon6.case
 	</select>
 	
 	
