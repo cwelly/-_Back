@@ -5,17 +5,17 @@
 <mapper namespace="com.ssafy.passproject.repository.UserRepository">
 
 	<insert id = "save" parameterType="user" >
-		insert into user(email_id, email_domain, password, name, addr, phone) values (#{email.id},#{email.domain},#{password},#{name},#{addr},#{phone})
+		insert into user(email_id, email_domain, password, name, addr, phone,sex,age,trans) values (#{email.id},#{email.domain},#{password},#{name},#{addr},#{phone})
 	</insert>
 	
 	<select id="findByEmail" parameterType="email" resultType="user">
-		select userno,email_id,email_domain , password,name,addr,phone 
+		select userno,email_id,email_domain , password,name,addr,phone ,sex,age,trans
 		from user 
 		where email_id=#{id} and email_domain=#{domain}
 	</select>
 	
 	<select id="findByUserno" parameterType="String" resultType="user">
-		select userno,email_id,email_domain , password,name,addr,phone
+		select userno,email_id,email_domain , password,name,addr,phone,sex,age,trans
 		from user 
 		where userno=#{userno} 
 	</select>

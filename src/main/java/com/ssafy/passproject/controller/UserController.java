@@ -132,12 +132,13 @@ public class UserController {
 //		return "redirect:/";
 //	}
 	
-	@PostMapping("/join/{emailid}/{emaildomain}/{password}/{name}/{addr}/{phone}")
+	@GetMapping("/join/{emailid}/{emaildomain}/{password}/{name}/{addr}/{phone}/{sex}/{age}/{trans}")
 	public @ResponseBody ResponseEntity<Map<String,Object>>  join(@PathVariable String emailid,
 			@PathVariable String emaildomain,@PathVariable String password,
-			@PathVariable String name,@PathVariable String addr,@PathVariable String phone) {
+			@PathVariable String name,@PathVariable String addr,@PathVariable String phone,
+			@PathVariable String sex , @PathVariable int age , @PathVariable String trans) {
 		
-		User user = new User(null, new Email(emailid, emaildomain) , password, name, addr, phone);
+		User user = new User(null, new Email(emailid, emaildomain) , password, name, addr, phone,sex,age,trans);
 		ResponseEntity<Map<String,Object>> res;
 		Map<String, Object> map = new HashMap();
 		try {
