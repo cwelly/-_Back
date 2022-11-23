@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -62,7 +63,26 @@ public class CaseController {
 	// 해당 나잇대에 해당되는 사건만 요청
 	
 	// 사용자의 정보에 해당하는  사건만 요청
-	
+	@GetMapping("/getfit/{sex}/{age}/{trans}")
+	public @ResponseBody ResponseEntity<Map<String,Object>>  getfit( @PathVariable String sex,
+			@PathVariable String age, @PathVariable String trans){
+		ResponseEntity<Map<String,Object>> res;
+		Map<String, Object> map = new HashMap();
+		List<Case> fitcase = new ArrayList<>();
+		System.out.println("입력으로 들어온  sex값 : "+sex+" , age값 : "+age+" , trans 값 : "+trans );
+		try {
+			fitcase=caseService.getCaseFit(sex, trans, age);
+			map.put("resMsg", "Success OK");
+			map.put("fitList", fitcase);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			map.put("resMsg", "false ");
+		}
+		
+		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		return res;
+	}
 	// 출발점과 도착점의 정보에 해당하는 범위 요청                               
 	
 	

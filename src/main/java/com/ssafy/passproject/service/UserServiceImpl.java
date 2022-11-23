@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	// 암호화로 인한 코드 변경
 	@Override
 	public int join(User user) throws SQLException, NoSuchAlgorithmException {
-		System.out.println("회가입");
+		System.out.println("회가입"+user);
 		if (userRepository.findByEmail(user.getEmail()) != null) {
 			System.out.println("already registered user");
 			return 0;

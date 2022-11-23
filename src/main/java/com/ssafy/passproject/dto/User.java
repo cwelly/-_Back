@@ -11,11 +11,17 @@ public class User {
 	private String addr;
 	private String phone;
 	private String sex;
-	private int age;
+	@Override
+	public String toString() {
+		return "User [userno=" + userno + ", email=" + email + ", password=" + password + ", name=" + name + ", addr="
+				+ addr + ", phone=" + phone + ", sex=" + sex + ", age=" + age + ", trans=" + trans + "]";
+	}
+
+	private String age;
 	private String trans;
 	
 	public User(Integer userno, Email email, String password, String name, String addr, String phone, String sex,
-			int age, String trans) {
+			String age, String trans) {
 		super();
 		this.userno = userno;
 		this.email = email;
@@ -33,10 +39,10 @@ public class User {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	public int getAge() {
+	public String getAge() {
 		return age;
 	}
-	public void setAge(int age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
 	public String getTrans() {
@@ -63,7 +69,7 @@ public class User {
 	}
 
 	public User(Integer userno, String emailId, String emailDomain, String password, String name, String addr, String phone,String sex,
-			int age, String trans) {
+			String age, String trans) {
 		this(userno, new Email(emailId, emailDomain), password, name, addr, phone,sex,age,trans);
 	}
 	
