@@ -16,7 +16,7 @@ public interface CaseService {
 		
 		// 2번 기능   sex =null , sm =null , trans =null 로 디폴트 설정한후에
 		//  입력받은 값들로 입력.
-		List<Case> getCaseFit(String sex , String trans ,int sm,  int lg)throws SQLException;
+		List<Case> getCaseFit(String sex , String trans ,String age)throws SQLException;
 		
 		// 3번 기능
 		List<Case> getCaseWayout(String slat , String slng , String elat , String elng)throws SQLException;

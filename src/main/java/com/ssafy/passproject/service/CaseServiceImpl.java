@@ -47,12 +47,44 @@ public class CaseServiceImpl implements CaseService {
 	}
 
 	@Override
-	public List<Case> getCaseFit(String sex , String trans ,int sm,  int lg) throws SQLException {
+	public List<Case> getCaseFit(String sex , String trans ,String age) throws SQLException {
 		Map<String, Object> map =new HashMap<>();
+		System.out.println("서비스로 들어온  sex값 : "+sex+" , age값 : "+age+" , trans 값 : "+trans );
 		map.put("sex", sex);
 		map.put("trans", trans);
-		map.put("sm", sm);
-		map.put("lg", lg);
+		if(age.equals("null")) {
+			map.put("sm","null");
+		}else {
+			int realAge = Integer.parseInt(age);
+			if(realAge<6) {
+				map.put("sm",0);
+				map.put("lg",5);
+			}
+			else if(realAge<13) {
+				map.put("sm",6);
+				map.put("lg",12);				
+			}
+			else if(realAge<19) {
+				map.put("sm",13);
+				map.put("lg",18);
+			}
+			else if(realAge<30) {
+				map.put("sm",19);
+				map.put("lg",29);
+			}
+			else if(realAge<50) {
+				map.put("sm",30);
+				map.put("lg",49);
+			}
+			else if(realAge<65) {
+				map.put("sm",50);
+				map.put("lg",64);
+			}
+			else {
+				map.put("sm",65);
+				map.put("lg",100);
+			}
+		}
 		return caseRepository.getCaseFit(map);
 	}
 
