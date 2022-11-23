@@ -72,7 +72,6 @@
 		vicsex , vicage , victrans , vicdamage ,
 		casetype , caseissue , deadcnt , hurtcnt , lat, lng
 		FROM (select * from webdaejeon6.case order by casedate) a
-		
-		group by adress
+		where  lat between #{lat1} and #{lat2} and lng between #{lng1} and #{lng2};
 	</select>
 </mapper>
