@@ -89,12 +89,12 @@ public class CaseServiceImpl implements CaseService {
 	}
 
 	@Override
-	public List<Case> getCaseWayout(String slat , String slng , String elat , String elng) throws SQLException {
+	public List<Case> getCaseWayout(String lat1 , String lat2 , String lng1 , String lng2) throws SQLException {
 		Map<String, String> map =new HashMap<>();
-		map.put("slat", slat);
-		map.put("slng", slng);
-		map.put("elat", elat);
-		map.put("elng", elng);
+		map.put("lat1", lat1);
+		map.put("lat2", lat2);
+		map.put("lng1", lng1);
+		map.put("lng2", lng2);
 		return caseRepository.getCaseWayout(map);
 	}
 

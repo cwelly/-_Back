@@ -84,7 +84,24 @@ public class CaseController {
 		return res;
 	}
 	// 출발점과 도착점의 정보에 해당하는 범위 요청                               
-	
+	@GetMapping("/getway/{lat1}/{lat2}/{lng1}/{lng2}")
+	public @ResponseBody ResponseEntity<Map<String,Object>>  getway( @PathVariable String lat1 ,@PathVariable String lat2,@PathVariable String lng1,@PathVariable String lng2){
+		ResponseEntity<Map<String,Object>> res;
+		Map<String, Object> map = new HashMap();
+		List<Case> waycase = new ArrayList<>();
+		try {
+			waycase=caseService.getCaseWayout(lat1, lat2, lng1, lng2);
+			map.put("resMsg", "Success OK");
+			map.put("wayList", waycase);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			map.put("resMsg", "false ");
+		}
+		
+		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		return res;
+	}
 	
 	
 	
