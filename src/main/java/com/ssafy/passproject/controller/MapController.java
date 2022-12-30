@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ import com.ssafy.passproject.service.MapService;
 @Controller()
 @RequestMapping("/map.do")
 public class MapController {
-
+	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private MapService mapService;
 	@Autowired
 	public MapController(MapService mapService) {
@@ -110,7 +112,8 @@ public class MapController {
 			HttpSession session = request.getSession();
 			List<MapInfo> origin = (List<MapInfo>) session.getAttribute("list");
 			List<MapInfo> listMember = mapService.sortAmount(origin);
-			System.out.println(listMember.size());
+//			System.out.println(listMember.size());
+			logger.debug("현재 조회된 인원 수 : {} ", listMember.size());
 			map.put("resMsg", "Success OK");
 			map.put("aptList", listMember);
 		}catch(Exception e) {
@@ -131,11 +134,13 @@ public class MapController {
 			List<MapInfo> origin = (List<MapInfo>) session.getAttribute("list");
 			
 			List<MapInfo> listMember = mapService.sortYear(origin);
-			System.out.println(listMember.size());
+//			System.out.println(listMember.size());
+			logger.debug("현재 조회된 인원 수 : {} ", listMember.size());
 			map.put("resMsg", "Success OK");
 			map.put("aptList", listMember);
 		}catch(Exception e) {
 			map.put("resMsg", "false ");
+			logger.error("년도별 정렬 실패 : {}", e);
 		}
 		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
 		
@@ -151,10 +156,12 @@ public class MapController {
 			HttpSession session = request.getSession();
 			List<MapInfo> origin = (List<MapInfo>) session.getAttribute("list");
 			List<MapInfo> listMember = mapService.sortArea(origin);
-			System.out.println(listMember.size());
+//			System.out.println(listMember.size());
+			logger.debug("현재 조회된 인원 수 : {} ", listMember.size());
 			map.put("resMsg", "Success OK");
 			map.put("aptList", listMember);
 		}catch(Exception e) {
+			logger.error("면적별 정렬 실패 : {}", e);
 			map.put("resMsg", "false ");
 		}
 		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

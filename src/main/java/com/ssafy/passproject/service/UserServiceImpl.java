@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.passproject.controller.UserController;
 import com.ssafy.passproject.dto.Dong;
 import com.ssafy.passproject.dto.Email;
 import com.ssafy.passproject.dto.User;
@@ -18,7 +21,11 @@ import com.ssafy.passproject.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+	private final Logger logger = LoggerFactory.getLogger(UserController.class);
+//	logger.error("로그인 실패 : {}", e);
+//	logger.debug("로그인 refreshToken 정보 : {}", refreshToken);
+//	logger.info("UserCotroller 생성자 호출!!!!");
+
 	public String encrypt(String text) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(text.getBytes());
@@ -49,9 +56,10 @@ public class UserServiceImpl implements UserService {
 	// 암호화로 인한 코드 변경
 	@Override
 	public int join(User user) throws SQLException, NoSuchAlgorithmException {
-		System.out.println("회가입"+user);
 		if (userRepository.findByEmail(user.getEmail()) != null) {
-			System.out.println("already registered user");
+//			System.out.println("already registered user");
+			logger.info("already registered user");
+
 			return 0;
 		}
 		user.setPassword(encrypt(user.getPassword()));

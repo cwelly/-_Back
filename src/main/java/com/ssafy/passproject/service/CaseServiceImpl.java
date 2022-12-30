@@ -49,7 +49,6 @@ public class CaseServiceImpl implements CaseService {
 	@Override
 	public List<Case> getCaseFit(String sex , String trans ,String age) throws SQLException {
 		Map<String, Object> map =new HashMap<>();
-		System.out.println("서비스로 들어온  sex값 : "+sex+" , age값 : "+age+" , trans 값 : "+trans );
 		map.put("sex", sex);
 		map.put("trans", trans);
 		if(age.equals("null")) {

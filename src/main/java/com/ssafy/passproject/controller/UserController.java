@@ -44,6 +44,9 @@ import io.swagger.annotations.ApiParam;
 public class UserController {
 
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
+//	logger.error("로그인 실패 : {}", e);
+//	logger.debug("로그인 refreshToken 정보 : {}", refreshToken);
+//	logger.info("UserCotroller 생성자 호출!!!!");
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 
@@ -104,7 +107,8 @@ public class UserController {
 			userService.modify(user);
 			user =userService.getByEmail(user.getEmail());
 			map.put("resMsg", "개인정보수정완료");
-			System.out.println(user.getUserno());
+//			System.out.println(user.getUserno());
+			logger.debug("유저 번호  : {}", user.getUserno());
 			List<Dong> interestRegion = regionService.getInterestRegionByUserno(user.getUserno());
 			UserInfo info = UserInfo.of(user, interestRegion);
 			map.put("userInfo", info);	
@@ -168,10 +172,12 @@ public class UserController {
 			HttpStatus status = null;
 			ResponseEntity<Map<String,Object>> res;
 			Map<String, Object> map = new HashMap();
-			System.out.println(email.getDomain()+" , "+email.getId()+" , "+password);
+//			System.out.println(email.getDomain()+" , "+email.getId()+" , "+password);
+			logger.debug("로그인 정보 / 이메일 아이디  : {}  , 이메일 도메인 : {}  ,  입력된 비밀번호 : {}",email.getId(), email.getDomain() ,password);
 			try {
 				User user = userService.login(email, password);
-				System.out.println("try? 이거 맞나");
+//				System.out.println("try? 이거 맞나");
+				logger.info("login 진입 확인!!!!");
 //				List<Dong> interestRegion = regionService.getInterestRegionByUserno(user.getUserno());
 //				UserInfo info = UserInfo.of(user, interestRegion);
 				if(user!=null) {
@@ -240,7 +246,8 @@ public class UserController {
 			HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.UNAUTHORIZED;
-		System.out.println(request.getHeader("access-token"));
+//		System.out.println(request.getHeader("access-token"));
+		logger.debug("  조회한 액세스 토큰 : {}", request.getHeader("access-token") );
 		if (jwtService.checkToken(request.getHeader("access-token"))) {
 			logger.info("사용 가능한 토큰!!!");
 			try {
@@ -328,7 +335,8 @@ public class UserController {
 			map.put("resMsg", "삭제완료");
 			
 		}catch(Exception e) {
-			System.out.println("실패");
+//			System.out.println("실패");
+			logger.error("삭제 실패 : {}", e);
 			map.put("resMsg", "false ");
 		}
 		res = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
