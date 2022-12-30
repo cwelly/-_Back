@@ -49,7 +49,7 @@ public class CaseController {
 			map.put("caseList", allcase);
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			logger.error("로그인 실패 : {}", e);
 			map.put("resMsg", "false ");
 		}
 		
@@ -69,14 +69,15 @@ public class CaseController {
 		ResponseEntity<Map<String,Object>> res;
 		Map<String, Object> map = new HashMap();
 		List<Case> fitcase = new ArrayList<>();
-		System.out.println("입력으로 들어온  sex값 : "+sex+" , age값 : "+age+" , trans 값 : "+trans );
+//		System.out.println("입력으로 들어온  sex값 : "+sex+" , age값 : "+age+" , trans 값 : "+trans );
+		logger.debug("입력으로 들어온  sex값 : {}  , age값 : {}  , trans 값 : {}", sex,age,trans);
 		try {
 			fitcase=caseService.getCaseFit(sex, trans, age);
 			map.put("resMsg", "Success OK");
 			map.put("fitList", fitcase);
 		}
 		catch(Exception e) {
-			System.out.println(e);
+			logger.error("맞춤 정보 조회 실패 : {}", e);
 			map.put("resMsg", "false ");
 		}
 		
@@ -95,7 +96,8 @@ public class CaseController {
 			map.put("wayList", waycase);
 		}
 		catch(Exception e) {
-			System.out.println(e);
+//			System.out.println(e);
+			logger.error("경로 조회 실패 : {}", e);
 			map.put("resMsg", "false ");
 		}
 		
